@@ -8,15 +8,14 @@
 </template>
 
 <script>
-import Navbar from './views/layout/Navbar.vue';
+import Navbar from './views/layout/Navbar.vue'
 
 export default {
   components: { Navbar },
   data() {
-    return {};
+    return {}
   },
-};
-
+}
 </script>
 <style lang="scss">
 </style>

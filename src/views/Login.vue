@@ -1,15 +1,97 @@
 <template>
-  <div class="login">
-      login
+  <div>
+    <a v-if="can('read')" id="back-arrow" @click="$router.push('/')">
+      <b-icon icon="times" />
+    </a>
+
+    <div id="login" class="columns is-centered">
+      <div class="column is-narrow">
+        <form @submit.prevent="login">
+          <div class="box">
+            <div class="has-text-centered">
+              <img :src="$store.state.config.logo" class="logo">
+            </div>
+            <br>
+            <b-field :label="Username">
+              <b-input v-model="username" name="username"
+              required @input="error = ''" ref="username" />
+            </b-field>
+            <b-field :label="Password">
+              <b-input v-model="password" type="password" name="password"
+              required @input="error = ''" password-reveal />
+            </b-field>
+
+            <div class="is-flex is-justify-end">
+              <button class="button is-primary">
+                登录
+              </button>
+            </div>
+
+            <div v-if="error">
+              <code>{{ error }}</code>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-export default {
+import api from '../api/api'
 
-};
+export default {
+  name: 'Login',
+  data() {
+    return {
+      username: '',
+      password: '',
+      error: '',
+    }
+  },
+  mounted() {
+    this.$refs.username.focus()
+  },
+  methods: {
+    login() {
+      api.login({
+        username: this.username,
+        password: this.password,
+      })
+        .then((user) => {
+          this.$store.commit('setUser', user)
+          api.changeDir({
+            to: '/',
+          }).then(() => this.$router.push('/'))
+        })
+        .catch((error) => {
+          if (error.response && error.response.data) {
+            this.error = this.lang(error.response.data.data)
+          } else {
+            this.handleError(error)
+          }
+          this.password = ''
+        })
+    },
+  },
+}
 </script>
 
-<style>
-
+<style scoped>
+.logo {
+  width: 300px;
+  display: inline-block;
+}
+.box {
+  padding: 30px;
+}
+#login {
+  padding: 120px 20px;
+}
+#back-arrow {
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: 20px;
+}
 </style>
