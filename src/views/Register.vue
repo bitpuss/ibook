@@ -2,43 +2,67 @@
   <div class="register container is-fluid">
     <div class="columns is-centered">
       <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-        <ValidationObserver ref="observer" v-slot="{ passes }">
-          <section class="section">
-            <BInputWithValidation rules="required|email"
-            type="email" label="用户名" v-model="user.username"/>
+        <ValidationObserver ref="observer" v-slot="{ invalid }">
+          <form @submit.prevent="doRegister">
+            <section class="section">
+              <ValidationProvider rules="required|email" name="邮箱" v-slot="{ errors, valid }">
+                <b-field
+                  label="邮箱"
+                  :type="{ 'is-danger': errors[0], 'is-success': valid }"
+                  :message="errors"
+                >
+                  <b-input type="email" placeholder="请输入您的邮箱" v-model="user.username"></b-input>
+                </b-field>
+              </ValidationProvider>
 
-            <BInputWithValidation
-              rules="required"
-              type="password"
-              label="Password"
-              vid="password"
-              v-model="password"
-            />
+              <ValidationProvider
+                rules="required"
+                vid="password"
+                name="密码"
+                v-slot="{ errors, valid }"
+              >
+                <b-field
+                  label="密码"
+                  :type="{ 'is-danger': errors[0], 'is-success': valid }"
+                  :message="errors"
+                >
+                  <b-input type="password" placeholder="请输入您的密码"
+                  v-model="user.password"></b-input>
+                </b-field>
+              </ValidationProvider>
 
-            <BInputWithValidation
-              rules="required|confirmed:password"
-              name="Password"
-              type="password"
-              label="Confirm Password"
-              v-model="confirmation"
-            />
+              <ValidationProvider
+                rules="required|confirmed:password"
+                name="确认密码"
+                v-slot="{ errors, valid }"
+              >
+                <b-field
+                  label="确认密码"
+                  :type="{ 'is-danger': errors[0], 'is-success': valid }"
+                  :message="errors"
+                >
+                  <b-input type="password" placeholder="请输入确认密码"
+                  v-model="user.confirmation"></b-input>
+                </b-field>
+              </ValidationProvider>
 
-            <div class="buttons">
-              <button class="button is-success" @click="passes(register)">
-                <span class="icon is-small">
-                  <i class="fas fa-check"></i>
-                </span>
-                <span>Submit</span>
-              </button>
+              <div class="buttons">
+                <button class="button is-success" type="submit" :disabled="invalid">
+                  <span class="icon is-small">
+                    <i class="fas fa-check"></i>
+                  </span>
+                  <span>注册</span>
+                </button>
 
-              <button class="button" @click="resetForm">
-                <span class="icon is-small">
-                  <i class="fas fa-redo"></i>
-                </span>
-                <span>Reset</span>
-              </button>
-            </div>
-          </section>
+                  <button class="button" type="button" @click="resetForm">
+                  <span class="icon is-small">
+                    <i class="fas fa-redo"></i>
+                  </span>
+                  <span>重置</span>
+                </button>
+              </div>
+            </section>
+          </form>
         </ValidationObserver>
       </div>
     </div>
@@ -46,52 +70,27 @@
 </template>
 
 <script>
-import { ValidationObserver } from 'vee-validate'
-import BInputWithValidation from '../components/inputs/BInputWithValidation.vue'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 
 export default {
   name: 'register',
-  components: { ValidationObserver, BInputWithValidation },
+  components: {
+    ValidationObserver,
+    ValidationProvider,
+  },
   data() {
     return {
       user: {
         username: '',
         telephone: '',
         password: '',
+        confirmation: '',
       },
     }
   },
-  // validations: {
-  //   user: {
-  //     username: {
-  //       required,
-  //       minLength: minLength(4),
-  //     },
-  //     telephone: {
-  //       required,
-  //       minLength: minLength(11),
-  //       maxLength: maxLength(11),
-  //     },
-  //     password: {
-  //       required,
-  //       minLength: minLength(6),
-  //       maxLength: maxLength(30),
-  //     },
-  //   },
-  // },
   methods: {
-    register() {
+    doRegister() {
       console.log('register!')
-      this.$v.$touch()
-      if (this.$v.$invalid) {
-        this.submitStatus = 'ERROR'
-      } else {
-        // do your submit logic here
-        this.submitStatus = 'PENDING'
-        setTimeout(() => {
-          this.submitStatus = 'OK'
-        }, 500)
-      }
     },
     resetForm() {
       this.user.username = ''

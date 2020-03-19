@@ -73,7 +73,7 @@ export default {
 
 <style scoped>
 .logo {
-  width: 300px;
+  width: 400px;
   display: inline-block;
 }
 .box {
