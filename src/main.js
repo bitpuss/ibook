@@ -1,11 +1,12 @@
 import Buefy from 'buefy'
 import Vue from 'vue'
-import VueLazyload from 'vue-lazyload'
 import axios from 'axios'
+import './vee-validate'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import api from './api/api'
+
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/css/fontawesome.css'
 
@@ -19,14 +20,9 @@ axios.defaults.baseURL = Vue.config.baseURL
 
 axios.defaults.headers['Content-Type'] = 'application/json'
 
-
 // install bulma-vue
 Vue.use(Buefy, {
   defaultIconPack: 'fas',
-})
-
-Vue.use(VueLazyload, {
-  preLoad: 1.3,
 })
 
 new Vue({

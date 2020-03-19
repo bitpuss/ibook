@@ -18,6 +18,11 @@ const routes = [
     name: 'login',
     component: () => import('../views/Login.vue'),
   },
+  {
+    path: '/vform',
+    name: 'vform',
+    component: () => import('../views/VForm.vue'),
+  },
 ]
 
 const router = new VueRouter({
