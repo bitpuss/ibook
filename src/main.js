@@ -1,16 +1,13 @@
 import Buefy from 'buefy'
-import 'buefy/dist/buefy.css'
 import Vue from 'vue'
 import VueLazyload from 'vue-lazyload'
 import axios from 'axios'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-
 import api from './api/api'
-
-// scss style
-import './assets/scss/index.scss'
+import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/css/fontawesome.css'
 
 Vue.config.productionTip = false
 
@@ -36,32 +33,33 @@ new Vue({
   router,
   store,
   created() {
-    api.getConfig()
-      .then((ret) => {
-        this.$store.commit('setConfig', ret.data.data)
-        api.getUser()
-          .then((user) => {
-            this.$store.commit('initialize')
-            this.$store.commit('setUser', user)
-            this.$router.push('/')
-          })
-          .catch(() => {
-            this.$notification.open({
-              message: 'Something went wrong',
-              type: 'is-danger',
-              queue: false,
-              indefinite: true,
-            })
-          })
-      })
-      .catch(() => {
-        this.$notification.open({
-          message: 'Something went wrong',
-          type: 'is-danger',
-          queue: false,
-          indefinite: true,
-        })
-      })
+    console.log(api)
+    // api.getConfig()
+    //   .then((ret) => {
+    //     this.$store.commit('setConfig', ret.data.data)
+    //     api.getUser()
+    //       .then((user) => {
+    //         this.$store.commit('initialize')
+    //         this.$store.commit('setUser', user)
+    //         this.$router.push('/')
+    //       })
+    //       .catch(() => {
+    //         this.$notification.open({
+    //           message: 'Something went wrong',
+    //           type: 'is-danger',
+    //           queue: false,
+    //           indefinite: true,
+    //         })
+    //       })
+    //   })
+    //   .catch(() => {
+    //     this.$notification.open({
+    //       message: 'Something went wrong',
+    //       type: 'is-danger',
+    //       queue: false,
+    //       indefinite: true,
+    //     })
+    //   })
   },
   render: (h) => h(App),
 }).$mount('#app')

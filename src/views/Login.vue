@@ -1,24 +1,20 @@
 <template>
-  <div>
-    <a v-if="can('read')" id="back-arrow" @click="$router.push('/')">
-      <b-icon icon="times" />
-    </a>
-
+  <div class="container">
     <div id="login" class="columns is-centered">
       <div class="column is-narrow">
         <form @submit.prevent="login">
           <div class="box">
             <div class="has-text-centered">
-              <img :src="$store.state.config.logo" class="logo">
+              <img src="../assets/logo.png" class="logo">
             </div>
             <br>
-            <b-field :label="Username">
+            <b-field>
               <b-input v-model="username" name="username"
-              required @input="error = ''" ref="username" />
+              required ref="username" />
             </b-field>
-            <b-field :label="Password">
+            <b-field>
               <b-input v-model="password" type="password" name="password"
-              required @input="error = ''" password-reveal />
+              required password-reveal />
             </b-field>
 
             <div class="is-flex is-justify-end">
@@ -41,7 +37,7 @@
 import api from '../api/api'
 
 export default {
-  name: 'Login',
+  name: 'login',
   data() {
     return {
       username: '',
@@ -57,21 +53,19 @@ export default {
       api.login({
         username: this.username,
         password: this.password,
+      }).then((user) => {
+        this.$store.commit('setUser', user)
+        api.changeDir({
+          to: '/',
+        }).then(() => this.$router.push('/'))
+      }).catch((error) => {
+        if (error.response && error.response.data) {
+          this.error = this.lang(error.response.data.data)
+        } else {
+          this.handleError(error)
+        }
+        this.password = ''
       })
-        .then((user) => {
-          this.$store.commit('setUser', user)
-          api.changeDir({
-            to: '/',
-          }).then(() => this.$router.push('/'))
-        })
-        .catch((error) => {
-          if (error.response && error.response.data) {
-            this.error = this.lang(error.response.data.data)
-          } else {
-            this.handleError(error)
-          }
-          this.password = ''
-        })
     },
   },
 }

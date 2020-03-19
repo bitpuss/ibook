@@ -40,6 +40,10 @@ export default {
 }
 </script>
 
-<style>
-
+<style scope>
+.register {
+    margin-top: 1.75rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
 </style>
